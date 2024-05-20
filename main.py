@@ -7,6 +7,7 @@ def main():
     Lr = LinearRegression(sys.argv[1], 1)
     Lr.reading_data()
     Lr.normalization()
+    Lr.learning()
 
 
 if '__main__' == __name__:
