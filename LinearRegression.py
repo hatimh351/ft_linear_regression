@@ -1,9 +1,8 @@
 import csv
 import numpy as np
-from matplotlib import pyplot as plt
 
 class LinearRegression:
-    def __init__(self, file_path, shape, lr=0.1):
+    def __init__(self, file_path, shape, lr=0.01, normalization_type='MIN_MAX'):
         self.x  = np.empty([0, shape])
         self.n_x  = np.empty([0, shape])
         self.n_y  = np.empty([1, 0])
@@ -14,6 +13,7 @@ class LinearRegression:
         self.x_max = None
         self.x_min = None
         self.lr = lr
+        self.normalization_type = normalization_type
 
     def reading_data(self):
         with open(self.file, 'r') as csvfile:
@@ -30,8 +30,9 @@ class LinearRegression:
                 self.x = np.append(self.x, [x], axis=0)
                 self.y = np.append(self.y, y)
 
-                self.x_max = np.array(x) if self.x_max == None else np.array([max(a,b) for a,b in zip(self.x_max, np.array(x))])
-                self.x_min = np.array(x) if self.x_min == None else np.array([min(a,b) for a,b in zip(self.x_min, np.array(x))])
+                if self.normalization_type == 'MIN_MAX':
+                    self.x_max = np.array(x) if self.x_max == None else np.array([max(a,b) for a,b in zip(self.x_max, np.array(x))])
+                    self.x_min = np.array(x) if self.x_min == None else np.array([min(a,b) for a,b in zip(self.x_min, np.array(x))])
 
 
 
@@ -54,11 +55,9 @@ class LinearRegression:
         lr = self.lr
         n = len(self.x)
 
-        n_w = len(self.w)
         for _ in range(10000):
             w = np.copy(self.w)
-            for i in range(n_w):
-                # print(x[i])
+            for i in range(len(w)):
                 w[i] -= lr * sum((self.f(x) - y) * x.reshape((24,))) * 1/n
             
             b -= lr * sum(self.f(x) - y) * 1/n
@@ -66,13 +65,10 @@ class LinearRegression:
 
 
         w = np.copy(self.w)
-        self.w = (self.w / (self.x_max - self.x_min))
-        self.b = self.b  - (w * self.x_min / (self.x_max - self.x_min))
-
-        print(self.b +  self.w * 240000)
-
-    # the result 
-    def linearRegression():
-        pass
+        if self.normalization_type == 'MIN_MAX':
+            for i in range(len(w)):
+                self.w[i] = (self.w[i] / (self.x_max - self.x_min))
+            self.b = self.b  - (w * self.x_min / (self.x_max - self.x_min))
+        # print(self.b +  self.w * 240000)
 
 
