@@ -8,8 +8,8 @@ This machine learning algorithm is implemented using pure Python and NumPy. It p
 
 Clone and change directory to project, then
 
-          ./setup.sh
-    	  source ../venv/bin/activate
+	  ./setup.sh
+	  source ../venv/bin/activate
 	  python3 main.py [your csv path]
 	  python3 predict.py x1 x2 x3 x4 ..
     
